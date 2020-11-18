@@ -1,0 +1,11 @@
+{% extends 'page/index.html' %}
+{% block content  %}
+<p>NAME : {{queryset.name}}
+EMAIL 	:	{{queryset.email}}
+CITY	:	{{queryset.city}}
+AGE		:	{{queryset.age_group}}
+TESTIMONIAL :	{{queryset.description}}
+</p>
+
+{% endblock %}
+

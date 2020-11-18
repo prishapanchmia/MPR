@@ -1,0 +1,48 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CO-Story</title>
+</head>
+<header class="text-gray-700 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center" >
+      <a href="./index.html" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+       </svg>
+       <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+       <span class="ml-5 text-3xl ">Co-Story </span>
+     </div>
+     </a>
+      -->
+     <!-- <nav class="md:ml-auto md:mr-5 flex flex-wrap items-center text-base fixed-center text-xl">
+       <a href="./index.html" class="mr-5 hover:text-gray-900">HOME</a>
+       <a href="./yourTestimonial.html" class="mr-5 hover:text-gray-900">MY COVID STORY</a>
+       <a href="./testimonials.html" class="mr-5 hover:text-gray-900">TESTIMONIALS</a>
+       <a href="./ourTeam.html" class="mr-5 hover:text-gray-900">OUR TEAM</a>
+     </nav> -->
+  <!--  </div>
+    <br> -->
+    {% extends 'page/index.html' %}
+       {% block content %}
+       <header>
+    <section class="text-gray-700 body-font bg-pink-200">
+        <h1><center><font face ="DIN Next Light" size="6" color="black">MODERATE CASES</font></center></h1>
+    </section>
+</header>
+<body>
+  <form method="GET" class="text-gray-700 body-font bg-pink-200">{% csrf_token %}
+  <h4>Filter</h4>
+  <input type="search" name="seacrh_name" label="Search By name" font face ="DIN Next Light" size = "4" color="black">Search By name</input>
+  <input type="search" name="search_city" label="Search By city" font face ="DIN Next Light" size = "4" color="black">Search By city</input>
+  <input type="search" name="search_state" label="Search By state" font face ="DIN Next Light" size = "4" color="black">Search By state</input>
+ <button type="submit">Filter</button> 
+</form>
+  {%for i in qs%}
+  <ul>
+    <li>{{i.name}}   {{i.city}}  <a href='{{i.get_absolute_url}}'>Details</a></li>
+  </ul>
+  {% endfor %}
+</body>
+{% endblock %}
