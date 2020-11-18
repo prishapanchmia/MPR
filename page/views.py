@@ -27,14 +27,16 @@ def ArticleListViewMild(request):
 	name_search = request.GET.get("search_name")
 	city_search = request.GET.get("search_city")
 	country_search=request.GET.get("search_state")
-
+	medicine_search = request.GET.get("search_medicine")
 	if name_search != '' and name_search is not None :
 		qs=qs.filter(name__icontains=name_search)
 	elif city_search != '' and city_search is not None :
 		qs=qs.filter(city__icontains=city_search)
 	elif country_search != '' and country_search is not None :
 		qs=qs.filter(state__icontains=country_search)
-
+	elif medicine_search !='' and medicine_search is not None:
+		qs=qs.filter(description__icontains=medicine_search)
+		
 	context = {
 	"qs" : qs
 	}
@@ -47,13 +49,15 @@ def ArticleListViewModerate(request):
 	name_search = request.GET.get("search_name")
 	city_search = request.GET.get("search_city")
 	country_search=request.GET.get("search_state")
-
+	medicine_search = request.GET.get("search_medicine")
 	if name_search != '' and name_search is not None :
 		qs=qs.filter(name__icontains=name_search)
 	elif city_search != '' and city_search is not None :
 		qs=qs.filter(city__icontains=city_search)
 	elif country_search != '' and country_search is not None :
 		qs=qs.filter(state__icontains=country_search)
+	elif medicine_search !='' and medicine_search is not None:
+		qs=qs.filter(description__icontains=medicine_search)
 
 	context = {
 	"qs" : qs
@@ -67,6 +71,7 @@ def ArticleListViewSevere(request):
 	name_search = request.GET.get("search_name")
 	city_search = request.GET.get("search_city")
 	country_search=request.GET.get("search_state")
+	medicine_search = request.GET.get("search_medicine")
 
 	if name_search != '' and name_search is not None :
 		qs=qs.filter(name__icontains=name_search)
@@ -74,7 +79,8 @@ def ArticleListViewSevere(request):
 		qs=qs.filter(city__icontains=city_search)
 	elif country_search != '' and country_search is not None :
 		qs=qs.filter(state__icontains=country_search)
-
+	elif medicine_search !='' and medicine_search is not None:
+		qs=qs.filter(description__icontains=medicine_search)
 	context = {
 	"qs" : qs
 	}
