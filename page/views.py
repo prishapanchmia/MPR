@@ -1,8 +1,14 @@
 from django.shortcuts import render,get_object_or_404,redirect
 
+from django.shortcuts import render
+from newsapi.newsapi_client import NewsApiClient
 from .models import Article
 from django.http import Http404
 from django.urls import reverse
+import praw
+import regex as re
+import tweepy
+from tweepy import OAuthHandler
 
 from django.views.generic import(
 	CreateView,
@@ -11,6 +17,20 @@ from django.views.generic import(
 	UpdateView,
 	DeleteView
 	)
+
+
+# credentials  --> put your credentials here
+consumer_key = "FWz48dwHP0mqLhSay9Xlz0YXc"
+consumer_secret = "lohMfS1JmZ7aU8DrhgzYrFgYyieEKcAEPpKn5UBjuXyIKxgGuZ"
+access_token = "1265910520994988032-yLlxXU2eJv4ZyPblbHNyF0cjmVNzi6"
+access_token_secret = "LJLYqB1ryzOmvSLO5kp5Pj0uJOtgO6vclNoUE2fQvQivV"
+
+# calling API
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+
+
 
 
 def ArticleDetailView(request,id):
@@ -24,19 +44,12 @@ def ArticleDetailView(request,id):
 def ArticleListViewMild(request):
 	qs = Article.objects.filter(type_of_case__icontains='Mild')
 	template_name='page/Mild.html'
-	name_search = request.GET.get("search_name")
-	city_search = request.GET.get("search_city")
-	country_search=request.GET.get("search_state")
-	medicine_search = request.GET.get("search_medicine")
-	if name_search != '' and name_search is not None :
-		qs=qs.filter(name__icontains=name_search)
-	elif city_search != '' and city_search is not None :
-		qs=qs.filter(city__icontains=city_search)
-	elif country_search != '' and country_search is not None :
-		qs=qs.filter(state__icontains=country_search)
-	elif medicine_search !='' and medicine_search is not None:
-		qs=qs.filter(description__icontains=medicine_search)
-		
+	keyword_search = request.GET.get("search_keyword")
+
+	if keyword_search != '' and keyword_search is not None:
+		qs=qs.filter(name__icontains=keyword_search) | qs.filter(city__icontains=keyword_search )|qs.filter(state__icontains=keyword_search)|qs.filter(description__icontains=keyword_search)
+
+
 	context = {
 	"qs" : qs
 	}
@@ -46,18 +59,12 @@ def ArticleListViewMild(request):
 def ArticleListViewModerate(request):
 	qs = Article.objects.filter(type_of_case__icontains='Moderate')
 	template_name='page/Moderate.html'
-	name_search = request.GET.get("search_name")
-	city_search = request.GET.get("search_city")
-	country_search=request.GET.get("search_state")
-	medicine_search = request.GET.get("search_medicine")
-	if name_search != '' and name_search is not None :
-		qs=qs.filter(name__icontains=name_search)
-	elif city_search != '' and city_search is not None :
-		qs=qs.filter(city__icontains=city_search)
-	elif country_search != '' and country_search is not None :
-		qs=qs.filter(state__icontains=country_search)
-	elif medicine_search !='' and medicine_search is not None:
-		qs=qs.filter(description__icontains=medicine_search)
+
+	keyword_search = request.GET.get("search_keyword")
+
+	if keyword_search != '' and keyword_search is not None:
+		qs=qs.filter(name__icontains=keyword_search) | qs.filter(city__icontains=keyword_search )|qs.filter(state__icontains=keyword_search)|qs.filter(description__icontains=keyword_search)
+
 
 	context = {
 	"qs" : qs
@@ -68,19 +75,11 @@ def ArticleListViewModerate(request):
 def ArticleListViewSevere(request):
 	qs = Article.objects.filter(type_of_case__icontains='Severe')
 	template_name='page/Severe.html'
-	name_search = request.GET.get("search_name")
-	city_search = request.GET.get("search_city")
-	country_search=request.GET.get("search_state")
-	medicine_search = request.GET.get("search_medicine")
+	nkeyword_search = request.GET.get("search_keyword")
 
-	if name_search != '' and name_search is not None :
-		qs=qs.filter(name__icontains=name_search)
-	elif city_search != '' and city_search is not None :
-		qs=qs.filter(city__icontains=city_search)
-	elif country_search != '' and country_search is not None :
-		qs=qs.filter(state__icontains=country_search)
-	elif medicine_search !='' and medicine_search is not None:
-		qs=qs.filter(description__icontains=medicine_search)
+	if keyword_search != '' and keyword_search is not None:
+		qs=qs.filter(name__icontains=keyword_search) | qs.filter(city__icontains=keyword_search )|qs.filter(state__icontains=keyword_search)|qs.filter(description__icontains=keyword_search)
+
 	context = {
 	"qs" : qs
 	}
@@ -142,9 +141,13 @@ class ArticleDeleteView(DeleteView):
 
 	def get_success_url(self):
 		return reverse('page:page-list')
+# def clean_tweet(tweet):
+#     	#return ' '.join(re.sub('(@[A-Za-z0-9]+)|([^0-9A-Za-z \\t])|(\\w+:\\/\\/\\S+)', ' ', tweet).split())
+# 		return ' '.join(re.sub('(@[A-Za-z0-9]+)|([^0-9A-Za-z \\t)|(\\w+:\\/\\/\\S+)',' ',tweet).split())
 
 def ArticleMainPage(request):
-	return render(request,"page/index.html",{})
+
+	return render(request,'page/index.html',context={})
 
 def ArticleAll(request):
 	return render(request,"page/testimonials.html",{})
